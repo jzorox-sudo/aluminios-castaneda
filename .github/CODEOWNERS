@@ -1,0 +1,6 @@
+# CODEOWNERS for Aluminios project
+# Asume un solo responsable o un equipo para revisiones de PRs y cambios.
+
+# Usuario o equipo GitHub
+# Reemplaza `@usuario` por tu usuario o `@org/equipo` según corresponda.
+* @usuario

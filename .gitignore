@@ -1,0 +1,23 @@
+# Node and editor
+node_modules/
+.vscode/
+.DS_Store
+.env
+
+# Build outputs
+dist/
+build/
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Logs
+npm-debug.log*
+.yarn-integrity
+
+# Temporary
+*.tmp
+
+# IDE
+.idea/
