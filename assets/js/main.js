@@ -138,3 +138,102 @@ window.toggleFaq = function toggleFaq(btn) {
     icon.innerText = 'close';
   }
 };
+
+/* ── 7. Gallery Modal with Carousel ───────────────────────── */
+(function initGalleryModal() {
+  // Gallery data
+  const galleryImages = [
+    { src: 'assets/img/img_1.jpg', alt: 'Proyecto 1' },
+    { src: 'assets/img/img_2.jpg', alt: 'Proyecto 2' },
+    { src: 'assets/img/img_3.jpg', alt: 'Proyecto 3' },
+    { src: 'assets/img/img_4.jpg', alt: 'Proyecto 4' },
+    { src: 'assets/img/img_5.jpg', alt: 'Proyecto 5' },
+    { src: 'assets/img/img_6.jpg', alt: 'Proyecto 6' },
+    { src: 'assets/img/img_7.jpg', alt: 'Proyecto 7' },
+    { src: 'assets/img/img_8.jpg', alt: 'Proyecto 8' },
+    { src: 'assets/img/img_9.jpg', alt: 'Proyecto 9' },
+  ];
+
+  let currentGalleryIndex = 0;
+
+  function updateGalleryDisplay() {
+    const modal = document.getElementById('gallery-modal');
+    const img = document.getElementById('modal-image');
+    const counter = document.getElementById('current-image');
+
+    img.src = galleryImages[currentGalleryIndex].src;
+    img.alt = galleryImages[currentGalleryIndex].alt;
+    counter.textContent = currentGalleryIndex + 1;
+
+    // Update thumbnail highlight
+    document.querySelectorAll('#gallery-thumbnails img').forEach((thumb, idx) => {
+      thumb.classList.toggle('ring-2', idx === currentGalleryIndex);
+      thumb.classList.toggle('ring-primary', idx === currentGalleryIndex);
+      thumb.classList.toggle('opacity-50', idx !== currentGalleryIndex);
+    });
+  }
+
+  function generateThumbnails() {
+    const thumbnailContainer = document.getElementById('gallery-thumbnails');
+    thumbnailContainer.innerHTML = '';
+
+    galleryImages.forEach((img, idx) => {
+      const thumb = document.createElement('img');
+      thumb.src = img.src;
+      thumb.alt = `Thumbnail ${idx + 1}`;
+      thumb.className = `w-16 h-16 object-cover cursor-pointer rounded-sm transition-all ${
+        idx === 0 ? 'ring-2 ring-primary' : 'opacity-50 hover:opacity-75'
+      }`;
+      thumb.onclick = () => {
+        currentGalleryIndex = idx;
+        updateGalleryDisplay();
+      };
+      thumbnailContainer.appendChild(thumb);
+    });
+  }
+
+  // Global functions for onclick handlers
+  window.openGalleryModal = function (index) {
+    currentGalleryIndex = index;
+    const modal = document.getElementById('gallery-modal');
+    modal.classList.remove('hidden');
+    generateThumbnails();
+    updateGalleryDisplay();
+
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', closeGalleryOnEscape);
+  };
+
+  window.closeGalleryModal = function () {
+    const modal = document.getElementById('gallery-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    document.removeEventListener('keydown', closeGalleryOnEscape);
+  };
+
+  window.nextGalleryImage = function () {
+    currentGalleryIndex = (currentGalleryIndex + 1) % galleryImages.length;
+    updateGalleryDisplay();
+  };
+
+  window.prevGalleryImage = function () {
+    currentGalleryIndex = (currentGalleryIndex - 1 + galleryImages.length) % galleryImages.length;
+    updateGalleryDisplay();
+  };
+
+  function closeGalleryOnEscape(e) {
+    if (e.key === 'Escape') {
+      window.closeGalleryModal();
+    }
+  }
+
+  // Close modal when clicking outside the image
+  document.getElementById('gallery-modal')?.addEventListener('click', function (e) {
+    if (e.target === this) {
+      window.closeGalleryModal();
+    }
+  });
+}());
